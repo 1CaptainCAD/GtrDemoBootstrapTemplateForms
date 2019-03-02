@@ -1,0 +1,333 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    {{pageTitle}}
+  </div>
+  <div class="panel-body">
+    <form class="form-horizontal"
+          novalidate
+          (ngSubmit)="addGuitar()">
+      <fieldset>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group"
+                 [ngClass]="{'has-error': (guitarBrandVar.touched ||
+                                           guitarBrandVar.dirty) &&
+                                           !guitarBrandVar.valid}">
+              <label class="col-md-4 control-label"
+                     for="guitarBrandId"
+              >Brand</label>
+              <div class="col-md-6">
+                <select class="form-control"
+                        id="guitarBrandId"
+                        name="guitarBrand"
+                        [(ngModel)]="guitarBrand"
+                        required
+                        (click)="onBrand()"
+                        #guitarBrandVar="ngModel">
+                  <option *ngFor="let brand of guitarBrands"
+                          [ngValue]="brand">
+                    {{brand.brandName}}
+                  </option>
+                </select>
+                <span class="help-block" *ngIf="(guitarBrandVar.touched ||
+                                            guitarBrandVar.dirty) &&
+                                            guitarBrandVar.errors">
+                   <span *ngIf="guitarBrandVar.errors?.required">
+                     Brand is required.
+                   </span>
+                 </span>
+              </div>
+            </div>
+            <div class="form-group"
+                 [ngClass]="{'has-error': (guitarModelVar.touched ||
+                                           guitarModelVar.dirty) &&
+                                           guitarModelVar.errors}">
+              <label class="col-md-4 control-label"
+                     for="guitarModelId">Model</label>
+              <div class="col-md-6">
+                <input class="form-control"
+                       placeholder="Model# (required)"
+                       type="text"
+                       id="guitarModelId"
+                       name="guitarModel"
+                       maxlength="15"
+                       required
+                       [(ngModel)]="guitar.modelNumber"
+                       #guitarModelVar="ngModel"
+                >
+                <span class="help-block" *ngIf="(guitarModelVar.touched ||
+                                                 guitarModelVar.dirty) &&
+                                                 guitarModelVar.errors">
+                   <span *ngIf="guitarModelVar.errors?.required">
+                     Model is required (max = 15 characters).
+                   </span>
+                </span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-4 control-label">Guitar Type</label>
+              <div class="col-md-8">
+                <label class="radio-inline">
+                  <input type="radio"
+                         name="guitarType"
+                         id="guitarTypeAccId"
+                         [value]="1"
+                         [(ngModel)]="guitar.guitarType">Acoustic
+                </label>
+                <label class="radio-inline">
+                  <input type="radio"
+                         name="guitarType"
+                         id="guitarTypeElecId"
+                         [value]="2"
+                         [(ngModel)]="guitar.guitarType">Electric
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group"
+                 [ngClass]="{'has-error': (guitarPriceVar.touched ||
+                                           guitarPriceVar.dirty) &&
+                                           !guitarPriceVar.valid}">
+              <label class="col-md-3 control-label"
+                     for="guitarPriceId">Price</label>
+              <div class="col-md-8">
+                <input class="form-control"
+                       id="guitarPriceId"
+                       placeholder="Price (required)"
+                       currencyMask
+                       required
+                       name="guitarPrice"
+                       [(ngModel)]="guitar.price"
+                       #guitarPriceVar="ngModel"
+                >
+                <span class="help-block" *ngIf="(guitarPriceVar.touched ||
+                                                 guitarPriceVar.dirty) &&
+                                                 guitarPriceVar.errors">
+                   <span *ngIf="guitarPriceVar.errors?.required">
+                     Price is required.
+                   </span>
+                 </span>
+              </div>
+            </div>
+            <div class="form-group"
+                 [ngClass]="{'has-error': (guitarDescriptionVar.touched ||
+                                           guitarDescriptionVar.dirty) &&
+                                           guitarDescriptionVar.errors}">
+              <label class="col-md-3 control-label"
+                     for="guitarDescriptionId">Description</label>
+              <div class="col-md-8">
+                <textarea class="form-control"
+                          id="guitarDescriptionId"
+                          placeholder="Description (required)"
+                          required
+                          name="guitarDescription"
+                          rows="3" cols="50"
+                          maxlength="100"
+                          [(ngModel)]="guitar.description"
+                          #guitarDescriptionVar="ngModel"
+                ></textarea>
+                <span class="help-block" *ngIf="(guitarDescriptionVar.touched ||
+                                            guitarDescriptionVar.dirty) &&
+                                            guitarDescriptionVar.errors">
+                   <span *ngIf="guitarDescriptionVar.errors?.required">
+                     Description is required (max = 100 characters).
+                   </span>
+                 </span>
+              </div>
+            </div>
+            <div class="form-group"
+                 [ngClass]="{'has-error': (guitarRatingVar.touched ||
+                                           guitarRatingVar.dirty) &&
+                                           guitarRatingVar.errors}"
+            >
+              <label class="col-md-3 control-label"
+                     for="guitarRatingId"
+              >Rating</label>
+              <div class="col-md-8">
+                <input class="form-control"
+                       id="guitarRatingId"
+                       type="number"
+                       required
+                       min="0" max="5"
+                       [gtrMinNumber]="minRatingNum"
+                       [gtrMaxNumber]="maxRatingNum"
+                       [(ngModel)]="guitar.rating"
+                       name="guitarRating"
+                       #guitarRatingVar="ngModel"
+                />
+                <span class="help-block" *ngIf="(guitarRatingVar.touched ||
+                                            guitarRatingVar.dirty) &&
+                                            guitarRatingVar.errors">
+                   <span *ngIf="guitarRatingVar.errors?.required">
+                     Rating is required.
+                   </span>
+                   <span *ngIf="guitarRatingVar.errors?.gtrMinNumber">
+                     Range is {{minRatingNum}} to {{maxRatingNum}}.
+                   </span>
+                   <span *ngIf="guitarRatingVar.errors?.gtrMaxNumber">
+                     Range is {{minRatingNum}} to {{maxRatingNum}}.
+                   </span>
+                 </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="col-md-4 control-label">String Type</label>
+              <div class="col-md-8">
+                <label class="radio-inline">
+                  <input type="radio"
+                         name="guitarStringType"
+                         id="guitarStringTypeStlId"
+                         value="steel"
+                         [(ngModel)]="guitar.stringType">Steel
+                </label>
+                <label class="radio-inline">
+                  <input type="radio"
+                         name="guitarStringType"
+                         id="guitarStringTypeNylId"
+                         value="nylon"
+                         [(ngModel)]="guitar.stringType">Nylon
+                </label>
+              </div>
+            </div>
+            <div class="form-group"
+                 [ngClass]="{'has-error': (guitarStringsQtyVar.touched ||
+                                           guitarStringsQtyVar.dirty) &&
+                                           guitarStringsQtyVar.errors}"
+            >
+              <label class="col-md-4 control-label"
+                     for="guitarStringQtyId"
+              >Strings</label>
+              <div class="col-md-8">
+                <input class="form-control"
+                       id="guitarStringQtyId"
+                       type="number"
+                       required
+                       min="4" max="12"
+                       name="guitarStrings"
+                       placeholder="Strings (required)"
+                       [gtrMinNumber]="minStringQty"
+                       [gtrMaxNumber]="maxStringQty"
+                       [(ngModel)]="guitar.numberOfStrings"
+                       #guitarStringsQtyVar="ngModel"
+                />
+                <span class="help-block" *ngIf="(guitarStringsQtyVar.touched ||
+                                                 guitarStringsQtyVar.dirty) &&
+                                                 guitarStringsQtyVar.errors">
+                   <span *ngIf="guitarStringsQtyVar.errors?.required">
+                     Rating is required.
+                   </span>
+                   <span *ngIf="guitarStringsQtyVar.errors?.gtrMinNumber">
+                     Range is {{minStringQty}} to {{maxStringQty}}.
+                   </span>
+                   <span *ngIf="guitarStringsQtyVar.errors?.gtrMaxNumber">
+                     Range is {{minStringQty}} to {{maxStringQty}}.
+                   </span>
+                 </span>
+              </div>
+            </div>
+            <div class="form-group"
+                 [ngClass]="{'has-error': (guitarFretsVar.touched ||
+                                           guitarFretsVar.dirty) &&
+                                           guitarFretsVar.errors}"
+            >
+              <label class="col-md-4 control-label"
+                     for="guitarFretsId"
+              >Frets</label>
+              <div class="col-md-8">
+                <input class="form-control"
+                       id="guitarFretsId"
+                       type="number"
+                       required
+                       min="10" max="30"
+                       name="guitarFrets"
+                       placeholder="Fret qty (required)"
+                       [gtrMinNumber]="minFretQty"
+                       [gtrMaxNumber]="maxFretQty"
+                       [(ngModel)]="guitar.numberOfFrets"
+                       #guitarFretsVar="ngModel"
+                />
+                <span class="help-block" *ngIf="(guitarFretsVar.touched ||
+                                                 guitarFretsVar.dirty) &&
+                                                 guitarFretsVar.errors">
+                   <span *ngIf="guitarFretsVar.errors?.required">
+                     Fret qty is required.
+                   </span>
+                   <span *ngIf="guitarFretsVar.errors?.gtrMinNumber">
+                     Range is {{minFretQty}} to {{maxFretQty}}.
+                   </span>
+                   <span *ngIf="guitarFretsVar.errors?.gtrMaxNumber">
+                     Range is {{minFretQty}} to {{maxFretQty}}.
+                   </span>
+                 </span>
+              </div>
+            </div>
+            <div class="form-group"
+                 [ngClass]="{'has-error': (guitarScaleLengthVar.touched ||
+                                           guitarScaleLengthVar.dirty) &&
+                                           guitarScaleLengthVar.errors}"
+            >
+              <label class="col-md-4 control-label"
+                     for="guitarScaleLengthId"
+              >Scale Length</label>
+              <div class="col-md-8">
+                <input class="form-control"
+                       id="guitarScaleLengthId"
+                       type="number"
+                       required
+                       min="20" max="30"
+                       name="guitarScaleLength"
+                       placeholder="Scale length (required)"
+                       [gtrMinNumber]="minScaleLength"
+                       [gtrMaxNumber]="maxScaleLength"
+                       [(ngModel)]="guitar.scaleLength"
+                       #guitarScaleLengthVar="ngModel"
+                />
+                <span class="help-block" *ngIf="(guitarScaleLengthVar.touched ||
+                                                 guitarScaleLengthVar.dirty) &&
+                                                 guitarScaleLengthVar.errors">
+                   <span *ngIf="guitarScaleLengthVar.errors?.required">
+                     Fret qty is required.
+                   </span>
+                   <span *ngIf="guitarScaleLengthVar.errors?.gtrMinNumber">
+                     Range is {{minScaleLength}} to {{maxScaleLength}}.
+                   </span>
+                   <span *ngIf="guitarScaleLengthVar.errors?.gtrMaxNumber">
+                     Range is {{minScaleLength}} to {{maxScaleLength}}.
+                   </span>
+                 </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr/>
+        <div class="row">
+          <div class="col-md-4 col-md-offset-1">
+            <span>
+              <button class="btn btn-primary"
+                      type="submit"
+                      style="width: 80px;margin-right: 10px"
+                      [title]="editForm.valid ? 'Save your entered data' : 'Disabled until the form data is valid'"
+                      [disabled]="!editForm.valid"
+              >Save</button>
+            </span>
+            <span>
+             <a class="btn btn-default"
+                style="width:80px;margin-right: 2px"
+                (click)="cancel()"
+                title="Cancel your edits"
+             >
+                Cancel
+             </a>
+           </span>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    Error: {{errorMessage}}
+  </div>
+</div>
